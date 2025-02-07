@@ -1,8 +1,14 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from sqlalchemy import MetaData
 
-db = SQLAlchemy()
+
+metadata = MetaData(naming_convention={
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+})
+
+db = SQLAlchemy(metadata=metadata) 
 
 def create_app():
     app = Flask(__name__)
