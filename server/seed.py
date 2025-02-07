@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
-from app import app
-from models import db, Customer, Review, Item
+from app import app  
+from models import db, Customer, Review, Item  
 
-with app.app_context():
+with app.app_context():  
 
-    Customer.query.delete()
-    Review.query.delete()
-    Item.query.delete()
+    db.session.query(Review).delete()
+    db.session.query(Customer).delete()
+    db.session.query(Item).delete()
 
     customer1 = Customer(name='Tal Yuri')
     customer2 = Customer(name='Raha Rosario')
@@ -21,14 +21,14 @@ with app.app_context():
     db.session.add_all([item1, item2, item3])
     db.session.commit()
 
-    db.session.add(Review(comment="zipper broke the first week",
-                   customer=customer1, item=item1))
-    db.session.add(Review(comment="love this backpack!",
-                   customer=customer2, item=item1))
-    db.session.add(Review(comment="coffee stays hot for hours!",
-                   customer=customer1, item=item2))
-    db.session.add(Review(comment="best coffee mug ever!",
-                   customer=customer3, item=item2))
-    db.session.add(Review(comment="cable too short",
-                   customer=customer3, item=item3))
+    reviews = [
+        Review(comment="zipper broke the first week", customer=customer1, item=item1),
+        Review(comment="love this backpack!", customer=customer2, item=item1),
+        Review(comment="coffee stays hot for hours!", customer=customer1, item=item2),
+        Review(comment="best coffee mug ever!", customer=customer3, item=item2),
+        Review(comment="cable too short", customer=customer3, item=item3)
+    ]
+    db.session.add_all(reviews)
     db.session.commit()
+
+    print("Database seeded successfully!")
